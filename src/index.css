@@ -3,6 +3,33 @@ body {
   padding: 0;
 }
 
+#root{
+  display: flex;
+  height: 100vh;
+  background-color: rgb(97, 44, 44);
+}
+
+#text {
+  width: 99%;
+}
+
+#key{
+  width: 99%;
+}
+
+#output{
+  background-color: white;
+}
+
+.button{
+  width: 50%;
+}
 .app{
-  background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 500px;
+  background-color: rgba(255, 255, 0, 0.466);
+  border: 3px solid black;
+
 }
