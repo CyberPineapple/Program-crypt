@@ -16,8 +16,7 @@ export default class App extends React.Component {
                 <input type="text" name="text" id="text" onChange={(v) => this.changeText(v)} value={this.state.textValue} />
                 <input type="text" name="key" id="key" onChange={(v) => this.changeKey(v)} value={this.state.keyValue} />
                 <div className="button_case">
-                    <button className='button' onClick={() => this.clickButton()}>encryption</button>
-                    <button className='button' onClick={() => this.clickButton()}>decryption</button>
+                    <button className='button' onClick={() => this.clickButton()}>encryption / decryption</button>
                 </div>
                 <span id="output">{this.state.outputValue}</span>
             </div>
@@ -36,98 +35,38 @@ export default class App extends React.Component {
         });
     };
 
-    textToBinary = (data) => {
-        return data.charCodeAt(0).toString(2);
+    textToChar = (data) => {
+        return data.charCodeAt(0);
     }
 
     encryption = (string, gamma) => {
         let code = [];
         if (string.length <= gamma.length){
             for (let i in string){
-                let value = [];
-                string[i] = string[i].split('');
-                string[i].reverse();
-                gamma[i] = gamma[i].split('');
-                gamma[i].reverse();
-                for (let j in string[i]){
-                    value[j] = string[i][j]^gamma[i][j];
-                }
-                console.log(value);
-                value = value.join('');
-                console.log(value);
-                value = parseInt(value, 10);
+                let value = string[i]^gamma[i];
                 code[i] = String.fromCharCode(value);
             }
-        } else if (string.length > gamma.length){
+        } else if (string.length > gamma.length) {
             let counter = 0;
-            let gammaItem = []
             for (let i in string){
-                if (gamma[counter] == undefined){
+                if (gamma[i] === undefined){
                     counter = 0;
                 }
-                console.log('counter: ', counter);
-                let value = [];
-                string[i] = string[i].split('');
-                gammaItem[counter] = gamma[counter].split('');
-                for (let j in string[i]){
-                    value[j] = string[i][j]^gammaItem[counter][j];
-                }
-                value = value.join('');
-                value = parseInt(value, 10);
-                console.log(value);
+                let value = string[i]^gamma[counter];
                 code[i] = String.fromCharCode(value);
                 counter++;
             }
         }
-        code.join('');
-        return code;
-    }
-
-    decryption = (string, gamma) => {
-        let code = [];
-        if (string.length <= gamma.length){
-            for (let i in string){
-                let value = [];
-                string[i] = string[i].split('');
-                gamma[i] = gamma[i].split('');
-                for (let j in string[i]){
-                    value[j] = string[i][j]^gamma[i][j];
-                }
-                value = value.reverse().join('');
-                value = parseInt(value, 10);
-                code[i] = String.fromCharCode(value);
-            }
-        } else if (string.length > gamma.length){
-            let counter = 0;
-            let gammaItem = []
-            for (let i in string){
-                if (gamma[counter] == undefined){
-                    counter = 0;
-                }
-                console.log('counter: ', counter);
-                let value = [];
-                string[i] = string[i].split('');
-                gammaItem[counter] = gamma[counter].split('');
-                for (let j in string[i]){
-                    value[j] = string[i][j]^gammaItem[counter][j];
-                }
-                value = value.join('');
-                value = parseInt(value, 10);
-                console.log(value);
-                code[i] = String.fromCharCode(value);
-                counter++;
-            }
-        }
+        console.log('code:', code);
         return code;
     }
 
     clickButton = () => {
-        let string = this.state.textValue.split('').map((data) => this.textToBinary(data));
-        let gamma = this.state.keyValue.split('').map((data, id, arr) => this.textToBinary(data));
+        console.log('string: ', this.state.textValue, '\n', 'gamma: ', this.state.keyValue);
+        let string = this.state.textValue.split('').map((data) => this.textToChar(data));
+        let gamma = this.state.keyValue.split('').map((data, id, arr) => this.textToChar(data));
         console.log('string: ', string, '\n', 'gamma: ', gamma);
         let code = this.encryption(string, gamma);
-        
-        console.log('code: ', code);
         this.setState({
             outputValue: code
         });
